@@ -68,10 +68,20 @@ public class BookServiceImpl implements BookService {
         return null;
     }
 
-    //ToDo: Override this method and find out why it needs to use entityManager
+
     @Override
     public Book saveBook(BookRequest bookReq) {
-        return bookRepo.save(bookReqToBook(bookReq));
+        if (validateInputBook(bookReq)){
+            return bookRepo.save(bookReqToBook(bookReq));
+        }
+        else
+            throw new RuntimeException("At least one of the \"Publisher\" or \"Author\" fields should be filled in. ");
+    }
+
+    @Override
+    public boolean validateInputBook(BookRequest bookRequest) {
+            BookValidator bookValidator = new BookValidator();
+        return bookValidator.validationOfTitleOrPublisher(bookRequest);
     }
 
     //

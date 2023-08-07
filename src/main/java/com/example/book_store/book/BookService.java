@@ -16,4 +16,6 @@ public interface BookService {
 
     Book saveBook(BookRequest bookReq); //why I need this?
 
+    boolean validateInputBook(BookRequest bookRequest);
+
 }
