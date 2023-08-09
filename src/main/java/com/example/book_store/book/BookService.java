@@ -12,10 +12,10 @@ public interface BookService {
 
     void deleteBook(Long id);
 
-    Book updateBook(Long id);
+    BookSrv updateBook(Long id,BookRequest bookRequest);
 
-    Book saveBook(BookRequest bookReq); //why I need this?
+    BookSrv saveBook(BookRequest bookReq); //why I need this?
 
-    boolean validateInputBook(BookRequest bookRequest);
+//    boolean validateInputBook(BookRequest bookRequest);
 
 }

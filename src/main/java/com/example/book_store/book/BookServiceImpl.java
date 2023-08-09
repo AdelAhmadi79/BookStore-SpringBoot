@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +27,19 @@ public class BookServiceImpl implements BookService {
         return bookSrv;
     }
 
-    private Book bookReqToBook(BookRequest bookRequest){
+    private Book bookReqToBook(BookRequest bookRequest) {
         Book book = new Book();
+        book.setAuthor(bookRequest.getAuthor());
+        book.setTitle(bookRequest.getTitle());
+        book.setPublisher(bookRequest.getPublisher());
+        book.setIsbn(bookRequest.getIsbn());
+        return book;
+    }
+
+    //ToAsk : is this polymorphism?
+    private Book bookReqToBook(Long id , BookRequest bookRequest){
+        Book book = new Book();
+        book.setId(id);
         book.setAuthor(bookRequest.getAuthor());
         book.setTitle(bookRequest.getTitle());
         book.setPublisher(bookRequest.getPublisher());
@@ -64,25 +76,19 @@ public class BookServiceImpl implements BookService {
 
     //ToDO; override this
     @Override
-    public Book updateBook(Long id) {
-        return null;
+    public BookSrv updateBook(Long id ,BookRequest bookRequest) {
+        Book managedBook = bookRepo.saveAndFlush(bookReqToBook(id,bookRequest));
+        entityManager.refresh(managedBook);
+        return bookToBookSrv(bookRepo.findById(id).get());
     }
 
 
     @Override
-    public Book saveBook(BookRequest bookReq) {
-        if (validateInputBook(bookReq)){
-            return bookRepo.save(bookReqToBook(bookReq));
-        }
-        else
-            throw new RuntimeException("At least one of the \"Publisher\" or \"Author\" fields should be filled in. ");
+    public BookSrv saveBook(BookRequest bookReq) {
+        bookValidator.validate(bookReq);
+        return bookToBookSrv(bookRepo.save(bookReqToBook(bookReq)));
+
     }
 
-    @Override
-    public boolean validateInputBook(BookRequest bookRequest) {
-            BookValidator bookValidator = new BookValidator();
-        return bookValidator.validationOfTitleOrPublisher(bookRequest);
-    }
 
-    //
 }

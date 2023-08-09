@@ -1,11 +1,19 @@
 package com.example.book_store.book;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class BookValidator {
 
-    public boolean validationOfTitleOrPublisher(BookRequest bookRequest){
-        return (bookRequest.getAuthor() != null || bookRequest.getPublisher() != null);
-
+    private final BookRepository bookRepository;
+    public void validate(BookRequest bookRequest) {
+        if (bookRepository.existsBookByTitle(bookRequest.getTitle())){
+            throw new RuntimeException("This title already exists.");
+        }
+        if (bookRequest.getAuthor() == null && bookRequest.getPublisher() == null) {
+            throw new RuntimeException("At least one of the \"Publisher\" or \"Author\" fields should be filled in. ");
+        }
     }
 }
