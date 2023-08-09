@@ -1,9 +1,8 @@
 package com.example.book_store.book;
 
 
-import com.example.book_store.domain.Book;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +31,15 @@ public class BookController {
         return new  ResponseEntity<>(bookService.saveBook(bookReq), HttpStatus.CREATED) ;
     }
 
-    @PutMapping("/books/{id}")
+    @PatchMapping("/books/{id}")
     private ResponseEntity<BookSrv> updateBook(@PathVariable Long id, @RequestBody BookRequest bookRequest){
         return new ResponseEntity<>(bookService.updateBook(id,bookRequest),HttpStatus.OK);
     }
+
+
+//ToDo : Complete this
+//    private ResponseEntity<Long> deleteBook(@RequestParam Long id){
+//        bookService.deleteBook(id);
+//        return new ResponseEntity<>(bookService.deleteBook(id),HttpStatus.NO_CONTENT)
+//    }
 }

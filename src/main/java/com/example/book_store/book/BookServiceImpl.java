@@ -1,50 +1,45 @@
 package com.example.book_store.book;
 
 import com.example.book_store.domain.Book;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityManager;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    @Autowired
-    private BookRepository bookRepo;
+
+    private final BookRepository bookRepo;
+
+    private final BookValidator bookValidator;
 
 
-//
-    private BookSrv bookToBookSrv(Book book){
-        BookSrv bookSrv = new BookSrv();
-        bookSrv.setTitle(book.getTitle());
-        bookSrv.setAuthor(book.getAuthor());
-        bookSrv.setPublisher(book.getPublisher());
-        return bookSrv;
+
+    //
+    private BookSrv bookToBookSrv(Book book) {
+        return BookSrv.builder()
+                .id(book.getId())
+                .author(book.getAuthor())
+                .publisher(book.getPublisher())
+                .title(book.getTitle())
+                .build();
     }
 
     private Book bookReqToBook(BookRequest bookRequest) {
-        Book book = new Book();
-        book.setAuthor(bookRequest.getAuthor());
-        book.setTitle(bookRequest.getTitle());
-        book.setPublisher(bookRequest.getPublisher());
-        book.setIsbn(bookRequest.getIsbn());
-        return book;
-    }
-
-    //ToAsk : is this polymorphism?
-    private Book bookReqToBook(Long id , BookRequest bookRequest){
-        Book book = new Book();
-        book.setId(id);
-        book.setAuthor(bookRequest.getAuthor());
-        book.setTitle(bookRequest.getTitle());
-        book.setPublisher(bookRequest.getPublisher());
-        book.setIsbn(bookRequest.getIsbn());
-        return book;
+        return Book.builder()
+                .author(bookRequest.getAuthor())
+                .title(bookRequest.getTitle())
+                .publisher(bookRequest.getPublisher())
+                .isbn(bookRequest.getIsbn())
+                .build();
     }
 
     @Override
@@ -55,8 +50,6 @@ public class BookServiceImpl implements BookService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book NOT FOUND!");
         return bookToBookSrv(book.get());
     }
-
-
 
 
     @Override
@@ -74,12 +67,27 @@ public class BookServiceImpl implements BookService {
         bookRepo.deleteById(id);
     }
 
-    //ToDO; override this
+    //ToDO; put change to patch, SaveAndFlush to SavendUpdate , search what does refresh do
     @Override
-    public BookSrv updateBook(Long id ,BookRequest bookRequest) {
-        Book managedBook = bookRepo.saveAndFlush(bookReqToBook(id,bookRequest));
-        entityManager.refresh(managedBook);
-        return bookToBookSrv(bookRepo.findById(id).get());
+    @Transactional
+    public BookSrv updateBook(Long id, BookRequest bookRequest) {
+//        Book managedBook = bookRepo.saveAndFlush(bookReqToBook(id,bookRequest));
+//        entityManager.refresh(managedBook);
+//        return bookToBookSrv(bookRepo.findById(id).get());
+        Optional<Book> book = bookRepo.findById(id);
+        if (!book.isPresent()) {
+            throw new RuntimeException("Book with id:" + id + " doesn't exist");
+        }
+        if (bookRequest.getTitle() != null)
+            book.get().setTitle(bookRequest.getTitle());
+        if (bookRequest.getAuthor() != null)
+            book.get().setTitle(bookRequest.getAuthor());
+        if (bookRequest.getIsbn() != null)
+            book.get().setIsbn(bookRequest.getIsbn());
+        if (bookRequest.getPublisher() != null)
+            book.get().setPublisher(bookRequest.getPublisher());
+        bookRepo.saveAndFlush(book.get());
+        return bookToBookSrv(book.get());
     }
 
 

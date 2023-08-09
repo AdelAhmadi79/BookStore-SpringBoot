@@ -1,14 +1,15 @@
 package com.example.book_store.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Book")
 public class Book {
 
@@ -21,11 +22,14 @@ public class Book {
     private String title;
 
     @Column
-    private long isbn;
+    private Long isbn;
 
     @Column
     private String author;
 
     @Column
     private String publisher;
+
+    //Why I need this?
+
 }
