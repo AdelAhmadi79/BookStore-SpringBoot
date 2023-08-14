@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class BookRequest {
 
-    @NotBlank
+    @NotBlank(message = "Title can't be Empty or Null")
     private String title;
 
     private Long isbn;

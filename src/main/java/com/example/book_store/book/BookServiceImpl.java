@@ -4,7 +4,6 @@ import com.example.book_store.domain.Book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 
@@ -64,38 +63,51 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBook(Long id) {
-        bookRepo.deleteById(id);
-    }
-
-    //ToDO; put change to patch, SaveAndFlush to SavendUpdate , search what does refresh do
-    @Override
-    @Transactional
-    public BookSrv updateBook(Long id, BookRequest bookRequest) {
-//        Book managedBook = bookRepo.saveAndFlush(bookReqToBook(id,bookRequest));
-//        entityManager.refresh(managedBook);
-//        return bookToBookSrv(bookRepo.findById(id).get());
         Optional<Book> book = bookRepo.findById(id);
         if (!book.isPresent()) {
-            throw new RuntimeException("Book with id:" + id + " doesn't exist");
+            throw new RuntimeException("Book with ID " + "could not be found.");
         }
-        if (bookRequest.getTitle() != null)
-            book.get().setTitle(bookRequest.getTitle());
-        if (bookRequest.getAuthor() != null)
-            book.get().setTitle(bookRequest.getAuthor());
-        if (bookRequest.getIsbn() != null)
-            book.get().setIsbn(bookRequest.getIsbn());
-        if (bookRequest.getPublisher() != null)
-            book.get().setPublisher(bookRequest.getPublisher());
-        bookRepo.saveAndFlush(book.get());
-        return bookToBookSrv(book.get());
+        bookRepo.delete(book.get());
     }
 
 
     @Override
     public BookSrv saveBook(BookRequest bookReq) {
-        bookValidator.validate(bookReq);
+        bookValidator.validateForCreate(bookReq);
         return bookToBookSrv(bookRepo.save(bookReqToBook(bookReq)));
 
+    }
+
+    @Override
+//    @Transactional
+    public BookSrv updateBook(Long id, BookRequest bookRequest) {
+        Optional<Book> bookOptional = bookRepo.findById(id);
+        Book book = bookOptional.orElseThrow(() -> new RuntimeException("Book with ID " + "could not be found."));
+//        if (!book.isPresent()) {
+//            throw new RuntimeException("Book with ID " + "could not be found.");
+//        }
+        bookValidator.validateForUpdate(book, bookRequest);
+
+        if (bookRequest.getTitle() != null)
+            book.setTitle(bookRequest.getTitle());
+
+        if (bookRequest.getAuthor() != null)
+            book.setAuthor(bookRequest.getAuthor());
+
+        if (bookRequest.getIsbn() != null)
+            book.setIsbn(bookRequest.getIsbn());
+
+        if (bookRequest.getPublisher() != null)
+            book.setPublisher(bookRequest.getPublisher());
+
+
+        if (((book.getAuthor() == null) || (book.getAuthor().trim().isEmpty()))
+                &&
+                ((book.getPublisher() == null) || (book.getPublisher().trim().isEmpty()))) {
+            throw new RuntimeException("At least one of the \"Publisher\" or \"Author\" fields should be filled in.");
+        }
+        bookRepo.saveAndFlush(book);
+        return bookToBookSrv(book);
     }
 
 

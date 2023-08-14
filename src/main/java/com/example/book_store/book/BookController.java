@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,7 @@ public class BookController {
     }
 //Access level
     @PostMapping("/books")
-    public ResponseEntity<BookSrv>  createBook(@RequestBody BookRequest bookReq){
+    public ResponseEntity<BookSrv>  createBook(@Valid @RequestBody BookRequest bookReq){
         //The bookService.saveBook(bookReq) returns an object with type BookSrv
         return new  ResponseEntity<>(bookService.saveBook(bookReq), HttpStatus.CREATED) ;
     }
@@ -37,9 +38,9 @@ public class BookController {
     }
 
 
-//ToDo : Complete this
-//    private ResponseEntity<Long> deleteBook(@RequestParam Long id){
-//        bookService.deleteBook(id);
-//        return new ResponseEntity<>(bookService.deleteBook(id),HttpStatus.NO_CONTENT)
-//    }
+    @DeleteMapping("/books/{id}")
+    private ResponseEntity<Long> deleteBook(@PathVariable Long id){
+        bookService.deleteBook(id);
+        return new ResponseEntity<>(id,HttpStatus.OK);
+    }
 }
