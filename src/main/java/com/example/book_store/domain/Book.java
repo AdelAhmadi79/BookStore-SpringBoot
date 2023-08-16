@@ -1,8 +1,9 @@
 package com.example.book_store.domain;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
+
 
 @Entity
 @Getter
@@ -30,6 +31,5 @@ public class Book {
     @Column
     private String publisher;
 
-    //Why I need this?
 
 }
