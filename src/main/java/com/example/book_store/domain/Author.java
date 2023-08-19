@@ -1,9 +1,8 @@
 package com.example.book_store.domain;
 
+
 import jakarta.persistence.*;
 import lombok.*;
-
-
 
 @Entity
 @Getter
@@ -11,29 +10,23 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Book")
-public class Book {
+@Table(name = "Author")
+public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private long id;
+    private Long authorId;
 
     @Column
-    private String title;
+    private String authorName;
 
     @Column
-    private Long isbn;
+    private String authorLName;
 
     @Column
-    private String author;
+    private String penName;
 
-    @Column
-    private String publisher;
-
-//
-//   @ManyToOne
-//    private Customer customer;
-
+    @OneToOne(mappedBy = "author")
+    Address address;
 
 }
