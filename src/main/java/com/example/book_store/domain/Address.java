@@ -14,7 +14,7 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long addressId;
+    private Long id;
 
     @Column
     private String street;
@@ -22,7 +22,6 @@ public class Address {
     @Column
     private String city;
 
-    @OneToOne
-    @JoinColumn(name = "authorId")
+    @OneToOne (mappedBy = "address")
     private Author author;
 }

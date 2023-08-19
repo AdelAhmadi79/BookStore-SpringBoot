@@ -15,7 +15,7 @@ public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long authorId;
+    private Long id;
 
     @Column
     private String authorName;
@@ -26,7 +26,8 @@ public class Author {
     @Column
     private String penName;
 
-    @OneToOne(mappedBy = "author")
+    @OneToOne()
+    @JoinColumn(name = "author_id")
     Address address;
 
 }
