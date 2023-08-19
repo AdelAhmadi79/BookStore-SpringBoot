@@ -1,6 +1,7 @@
 package com.example.book_store.author;
 
 
+import com.example.book_store.address.AddressRepository;
 import com.example.book_store.address.AddressRequest;
 import com.example.book_store.domain.Address;
 import com.example.book_store.domain.Author;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class AuthorServiceImpl implements AuthorService{
 
     private final AuthorRepository authorRepo;
+    private final AddressRepository addressRepository;
 
     private AuthorSrv authorToAuthorSrv (Author author){
         return AuthorSrv.builder()
@@ -31,16 +33,17 @@ public class AuthorServiceImpl implements AuthorService{
 
     private Author authorReqToAuthor (AuthorRequest authorRequest){
         Address address = addressReqToAddress(authorRequest.getAddress());
-        Author author = Author.builder()
+        return Author.builder()
                 .address(address)
                 .authorName(authorRequest.getAuthorName())
                 .authorLName(authorRequest.getAuthorLName())
                 .penName(authorRequest.getPenName())
                 .build();
-        return author;
     }
     @Override
     public AuthorSrv saveAuthor(AuthorRequest authorRequest) {
-        return  authorToAuthorSrv(authorRepo.save(authorReqToAuthor(authorRequest)));
+        Author author = authorReqToAuthor(authorRequest);
+        addressRepository.save(author.getAddress());
+        return  authorToAuthorSrv(authorRepo.save(author));
     }
 }
