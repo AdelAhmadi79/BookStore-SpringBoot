@@ -20,7 +20,7 @@ public class Book {
     @Column
     private long id;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Column

@@ -76,14 +76,10 @@ public class BookServiceImpl implements BookService {
         bookRepo.delete(book.get());
     }
 
-    @Override
-    public BookSrv updateBook(Long id, BookRequest bookRequest) {
-        return null;
-    }
 
     @Override
     public BookSrv saveBook(BookRequest bookReq) {
-
+        bookValidator.validateForCreate(bookReq);
         Book book = bookReqToBook(bookReq);
         Set<Author> authors = new HashSet<>();
 
@@ -96,44 +92,32 @@ public class BookServiceImpl implements BookService {
         return bookToBookSrv(book);
     }
 
-//    @Override
-//    public BookSrv saveBook(BookRequest bookReq) {
-//        bookValidator.validateForCreate(bookReq);
-//        return bookToBookSrv(bookRepo.save(bookReqToBook(bookReq)));
-//
-//    }
 
-//    @Override
-////    @Transactional
-//    public BookSrv updateBook(Long id, BookRequest bookRequest) {
-//        Optional<Book> bookOptional = bookRepo.findById(id);
-//        Book book = bookOptional.orElseThrow(() -> new RuntimeException("Book with ID " + id + "could not be found."));
-////        if (!book.isPresent()) {
-////            throw new RuntimeException("Book with ID " + id + "could not be found.");
-////        }
-//        bookValidator.validateForUpdate(book, bookRequest);
-//
-//        if (bookRequest.getTitle() != null)
-//            book.setTitle(bookRequest.getTitle());
-//
-//        if (bookRequest.getAuthor() != null)
-//            book.setAuthor(bookRequest.getAuthor());
-//
-//        if (bookRequest.getIsbn() != null)
-//            book.setIsbn(bookRequest.getIsbn());
-//
-//        if (bookRequest.getPublisher() != null)
-//            book.setPublisher(bookRequest.getPublisher());
-//
-//
-//        if (((book.getAuthor() == null) || (book.getAuthor().trim().isEmpty()))
-//                &&
-//                ((book.getPublisher() == null) || (book.getPublisher().trim().isEmpty()))) {
-//            throw new RuntimeException("At least one of the \"Publisher\" or \"Author\" fields should be filled in.");
-//        }
-//        bookRepo.saveAndFlush(book);
-//        return bookToBookSrv(book);
-//    }
+    @Override
+//    @Transactional
+    public BookSrv updateBook(Long id, BookRequest bookRequest) {
+        Optional<Book> bookOptional = bookRepo.findById(id);
+        Book book = bookOptional.orElseThrow(() -> new RuntimeException("Book with ID " + id + "could not be found."));
+        bookValidator.validateForUpdate(book, bookRequest);
+
+        if (bookRequest.getTitle() != null)
+            book.setTitle(bookRequest.getTitle());
+
+        if (bookRequest.getIsbn() != null)
+            book.setIsbn(bookRequest.getIsbn());
+
+        if (bookRequest.getPublisher() != null)
+            book.setPublisher(bookRequest.getPublisher());
+
+        for (Long authorId : bookRequest.getAuthorIdList()) {
+            if (authorId != null) {
+                book.getAuthors().add(authorRepo.findById(authorId).orElseThrow(() -> new RuntimeException("Author with ID " + authorId + " could not be found.")));
+            }
+        }
+
+        bookRepo.saveAndFlush(book);
+        return bookToBookSrv(book);
+    }
 
 
 }
