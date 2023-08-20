@@ -1,9 +1,11 @@
 package com.example.book_store.book;
 
+import com.example.book_store.domain.Author;
 import lombok.*;
 
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
 
 
 @Setter
@@ -16,9 +18,11 @@ public class BookRequest {
 
     private Long isbn;
 
-    private String author;
+//    private String author;
 
     private String publisher;
+
+    private List<Long> authorIdList;
 
 }
 

@@ -1,10 +1,6 @@
 package com.example.book_store.author;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +10,7 @@ import lombok.Setter;
 @Builder
 public class AuthorSrv {
 
-    private Long authorId;
+    private Long id;
 
 
     private String authorName;

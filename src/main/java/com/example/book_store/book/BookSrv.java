@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Setter
 @Getter
@@ -15,11 +17,10 @@ public class BookSrv {
 
     private String title;
 
-    private String author;
+//    private String author;
 
     private String publisher;
 
-//    private Book tempBook = bookService.getSingleBook(id);
-
+    private List<String> authorsPenName;
 
 }

@@ -4,6 +4,8 @@ package com.example.book_store.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -27,7 +29,10 @@ public class Author {
     private String penName;
 
     @OneToOne()
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "address_id")
     Address address;
+
+    @ManyToMany(mappedBy = "authors")
+    private Set<Book> book;
 
 }

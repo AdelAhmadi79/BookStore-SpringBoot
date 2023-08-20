@@ -3,6 +3,7 @@ package com.example.book_store.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
 
 
 @Entity
@@ -25,11 +26,16 @@ public class Book {
     @Column
     private Long isbn;
 
-    @Column
-    private String author;
 
     @Column
     private String publisher;
+
+    @ManyToMany
+    @JoinTable(
+            name = "author_book",
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private Set<Author> authors;
 
 //
 //   @ManyToOne

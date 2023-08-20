@@ -17,7 +17,7 @@ public class AuthorServiceImpl implements AuthorService{
 
     private AuthorSrv authorToAuthorSrv (Author author){
         return AuthorSrv.builder()
-                .authorId(author.getId())
+                .id(author.getId())
                 .authorName(author.getAuthorName())
                 .authorLName(author.getAuthorLName())
                 .penName(author.getPenName())
