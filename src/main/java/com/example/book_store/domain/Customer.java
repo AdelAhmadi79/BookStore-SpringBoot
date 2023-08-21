@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 //import java.util.Set;
 
 @Entity
@@ -20,7 +21,7 @@ import java.util.Date;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long CustomerID;
+    private long id;
 
     @Column
     private String firstName;
@@ -34,14 +35,15 @@ public class Customer {
     @Column
     private LocalDate birthDay;
 
-    @Column
+    @Column(updatable = false)
     @CreationTimestamp
+    //ToDo: If i don't set the updatable to false It gets set
     private Date createdAt;
 
     @Column
     @UpdateTimestamp
     private Date updatedAt;
 
-//    @OneToMany
-//    private Set<Book>  book;
+    @OneToMany(mappedBy = "customer")
+    private Set<Book> books;
 }

@@ -14,6 +14,6 @@ public class AuthorRequest {
 
     private String penName;
 
-    private AddressRequest address;
+    private AddressRequest addressRequest;
 
 }

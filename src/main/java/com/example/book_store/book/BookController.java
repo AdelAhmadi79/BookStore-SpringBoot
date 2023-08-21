@@ -35,11 +35,11 @@ public class BookController {
 
 
 
-//    @PatchMapping("/books/{id}")
-//    private ResponseEntity<BookSrv> updateBook(@PathVariable Long id, @RequestBody BookRequest bookRequest){
-//        return new ResponseEntity<BookSrv>(bookService.updateBook(id,bookRequest),HttpStatus.OK);
-//    }
-//
+    @PatchMapping("/books/{id}")
+    private ResponseEntity<BookSrv> updateBook(@PathVariable Long id, @RequestBody BookRequest bookRequest){
+        return new ResponseEntity<>(bookService.updateBook(id,bookRequest),HttpStatus.OK);
+    }
+
 
     @DeleteMapping("/books/{id}")
     private ResponseEntity<Long> deleteBook(@PathVariable Long id){

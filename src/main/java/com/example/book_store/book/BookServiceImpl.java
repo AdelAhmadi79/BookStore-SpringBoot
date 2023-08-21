@@ -24,14 +24,12 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepo;
 
 
-    //
     private BookSrv bookToBookSrv(Book book) {
         List<String> penNames = book.getAuthors().stream()
                 .map(Author::getPenName)
                 .collect(Collectors.toList());
         return BookSrv.builder()
                 .id(book.getId())
-//                .author(book.getAuthor())
                 .publisher(book.getPublisher())
                 .title(book.getTitle())
                 .authorsPenName(penNames)
@@ -40,7 +38,6 @@ public class BookServiceImpl implements BookService {
 
     private Book bookReqToBook(BookRequest bookRequest) {
         return Book.builder()
-//                .author(bookRequest.getAuthor())
                 .title(bookRequest.getTitle())
                 .publisher(bookRequest.getPublisher())
                 .isbn(bookRequest.getIsbn())
@@ -49,8 +46,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookSrv getSingleBookSrv(Long id) {
-
         Optional<Book> book = bookRepo.findById(id);
+
         if (!book.isPresent())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book NOT FOUND!");
         return bookToBookSrv(book.get());
@@ -84,7 +81,7 @@ public class BookServiceImpl implements BookService {
         Set<Author> authors = new HashSet<>();
 
         for (Long authorId : bookReq.getAuthorIdList()) {
-            Author author = authorRepo.findById(authorId).orElseThrow(() -> new RuntimeException("Author with ID " + authorId + " could not be found."));
+            Author author = authorRepo.findById(authorId).orElseThrow(() -> new RuntimeException("Author with ID \"" + authorId + "\" could not be found."));
             authors.add(author);
         }
         book.setAuthors(authors);
@@ -94,7 +91,6 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-//    @Transactional
     public BookSrv updateBook(Long id, BookRequest bookRequest) {
         Optional<Book> bookOptional = bookRepo.findById(id);
         Book book = bookOptional.orElseThrow(() -> new RuntimeException("Book with ID " + id + "could not be found."));

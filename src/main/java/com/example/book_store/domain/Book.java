@@ -37,9 +37,11 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     private Set<Author> authors;
 
-//
-//   @ManyToOne
-//    private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    //Why I should assign manually?
+    private Customer customer;
 
 
 }

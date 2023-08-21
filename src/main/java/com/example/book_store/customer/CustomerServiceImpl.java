@@ -1,0 +1,58 @@
+package com.example.book_store.customer;
+
+import com.example.book_store.book.BookRepository;
+import com.example.book_store.domain.Book;
+import com.example.book_store.domain.Customer;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Service
+@RequiredArgsConstructor
+public class CustomerServiceImpl implements CustomerService {
+
+    private final CustomerRepository customerRepo;
+    private final BookRepository bookRepo;
+
+    @Override
+    public CustomerSrv reserveBooks(Set<Long> bookIdList, Long customerId) {
+        Customer customer = customerRepo.findById(customerId).orElseThrow(() -> new RuntimeException("Customer with Id \"" + customerId + "\" could not be found."));
+        for (Long bookId : bookIdList) {
+            Book book = bookRepo.findById(bookId).orElseThrow(() -> new RuntimeException("Book with Id \"" + bookId + "\" could not be found."));
+            book.setCustomer(customer);
+        }
+        customerRepo.saveAndFlush(customer);
+        //here without entity manager updateAt shouldn't get updated(should be null)
+        return customerToCustomerSrvForReserve(customer);
+    }
+
+    public CustomerSrv customerToCustomerSrvForReserve(Customer customer) {
+        CustomerSrv customerSrv = CustomerSrv.builder()
+                .CustomerID(customer.getId())
+                .createdAt(customer.getCreatedAt())
+                .updatedAt(customer.getUpdatedAt())
+                .build();
+        Set<String> bookTitle = new HashSet<>();
+        for (Book book : customer.getBooks()) {
+            bookTitle.add(book.getTitle());
+        }
+        customerSrv.setBookTitles(bookTitle);
+//        there is no way to automatically write these ?
+        if (customer.getFirstName() != null)
+            customerSrv.setFirstName(customer.getFirstName());
+
+        if (customer.getLastName() != null)
+            customerSrv.setLastName(customer.getLastName());
+
+        if (customer.getBirthDay() != null)
+            customerSrv.setBirthDay(customer.getBirthDay());
+
+        if (customer.getEmail() != null)
+            customerSrv.setEmail(customer.getEmail());
+
+        return customerSrv;
+    }
+
+}
