@@ -1,6 +1,7 @@
 package com.example.book_store.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,16 +24,19 @@ public class Author {
     private String authorName;
 
     @Column
-    private String authorLName;
+    private String authorLastName;
 
     @Column
     private String penName;
 
-    @OneToOne()
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     Address address;
 
-    @ManyToMany(mappedBy = "authors")
+
+    @ManyToMany(mappedBy = "authors" , fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Book> book;
 
 }

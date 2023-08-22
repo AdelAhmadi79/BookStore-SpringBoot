@@ -1,6 +1,6 @@
 package com.example.book_store.author;
 
-
+import com.example.book_store.domain.Address;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,8 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class AuthorSrv {
-
+public class AuthorSrvWithoutBooks {
     private Long id;
 
 
@@ -20,4 +19,6 @@ public class AuthorSrv {
 
 
     private String penName;
+
+    private Address address;
 }

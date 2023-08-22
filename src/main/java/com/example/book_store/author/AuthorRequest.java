@@ -10,7 +10,7 @@ public class AuthorRequest {
 
     private String authorName;
 
-    private String authorLName;
+    private String authorLastName;
 
     private String penName;
 

@@ -1,13 +1,15 @@
 package com.example.book_store.book;
 
 import com.example.book_store.author.AuthorRepository;
+import com.example.book_store.author.AuthorSrvForGetBooks;
+import com.example.book_store.customer.CustomerSrv;
 import com.example.book_store.domain.Author;
 import com.example.book_store.domain.Book;
+import com.example.book_store.domain.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,6 +46,26 @@ public class BookServiceImpl implements BookService {
                 .build();
     }
 
+    private AuthorSrvForGetBooks authorToAuthorSrvForBooks(Author author) {
+        return AuthorSrvForGetBooks.builder()
+                .authorName(author.getAuthorName())
+                .authorLastName(author.getAuthorLastName())
+                .penName(author.getPenName())
+//                .book(author.getBook())
+                .build();
+    }
+
+    private CustomerSrv CustomerToCustomerSrv(Customer customer) {
+        if (customer==null){
+            return null;
+        }
+        return CustomerSrv.builder()
+                .CustomerID(customer.getId())
+                .email(customer.getEmail())
+                .build();
+
+    }
+
     @Override
     public BookSrv getSingleBookSrv(Long id) {
         Optional<Book> book = bookRepo.findById(id);
@@ -62,6 +84,29 @@ public class BookServiceImpl implements BookService {
             bookSrvList.add(bookToBookSrv(book));
         }
         return bookSrvList;
+    }
+
+    @Override
+    public List<BookSrvWithoutCustomer> getAllBooksWithoutCustomer() {
+//        List<Book> books = bookRepo.findAll();
+        List<Book> books = bookRepo.getAllBooks();
+        List<BookSrvWithoutCustomer> bookSrvWithoutCustomerList = new ArrayList<>();
+        for (Book book : books) {
+
+            List<AuthorSrvForGetBooks> authorSrvForGetBooksList = new ArrayList<>();
+            for (Author author : book.getAuthors()
+            ) {
+                authorSrvForGetBooksList.add(authorToAuthorSrvForBooks(author));
+            }
+            bookSrvWithoutCustomerList.add(BookSrvWithoutCustomer.builder()
+                    .id(book.getId())
+                    .publisher(book.getPublisher())
+                    .title(book.getTitle())
+                    .customerSrv(CustomerToCustomerSrv(book.getCustomer()))
+                    .authorSrvForGetBooksSet(authorSrvForGetBooksList)
+                    .build());
+        }
+        return bookSrvWithoutCustomerList;
     }
 
     @Override

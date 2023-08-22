@@ -37,13 +37,12 @@ public class Customer {
 
     @Column(updatable = false)
     @CreationTimestamp
-    //ToDo: If i don't set the updatable to false It gets set
     private Date createdAt;
 
     @Column
     @UpdateTimestamp
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     private Set<Book> books;
 }

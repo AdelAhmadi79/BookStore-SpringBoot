@@ -1,14 +1,17 @@
 package com.example.book_store.author;
 
 
+import com.example.book_store.domain.Book;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @Builder
-public class AuthorSrv {
+public class AuthorSrvForGetBooks {
 
     private Long id;
 
@@ -20,4 +23,6 @@ public class AuthorSrv {
 
 
     private String penName;
+
+//    private Set<Book> book;
 }

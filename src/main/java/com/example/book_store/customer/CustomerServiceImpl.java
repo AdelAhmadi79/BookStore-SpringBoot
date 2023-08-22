@@ -28,6 +28,11 @@ public class CustomerServiceImpl implements CustomerService {
         return customerToCustomerSrvForReserve(customer);
     }
 
+    @Override
+    public Customer getSingleCustomer(Long id) {
+        return customerRepo.findById(id).orElseThrow(() -> new RuntimeException("Customer with Id \"" + id + "\" could not be found."));
+    }
+
     public CustomerSrv customerToCustomerSrvForReserve(Customer customer) {
         CustomerSrv customerSrv = CustomerSrv.builder()
                 .CustomerID(customer.getId())
@@ -39,7 +44,6 @@ public class CustomerServiceImpl implements CustomerService {
             bookTitle.add(book.getTitle());
         }
         customerSrv.setBookTitles(bookTitle);
-//        there is no way to automatically write these ?
         if (customer.getFirstName() != null)
             customerSrv.setFirstName(customer.getFirstName());
 

@@ -1,5 +1,6 @@
 package com.example.book_store.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,7 +31,8 @@ public class Book {
     @Column
     private String publisher;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(
             name = "author_book",
             joinColumns = @JoinColumn(name = "author_id"),
@@ -38,9 +40,9 @@ public class Book {
     private Set<Author> authors;
 
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
+//in alan chia ro lazy migire?
     @JoinColumn(name = "customer_id")
-    //Why I should assign manually?
     private Customer customer;
 
 

@@ -2,6 +2,8 @@ package com.example.book_store.book;
 
 
 
+import com.example.book_store.domain.Book;
+
 import java.util.List;
 
 public interface BookService {
@@ -9,6 +11,8 @@ public interface BookService {
     BookSrv getSingleBookSrv(Long id);
 
     List<BookSrv> getBookSrvs();
+
+    List<BookSrvWithoutCustomer> getAllBooksWithoutCustomer();
 
     void deleteBook(Long id);
 
