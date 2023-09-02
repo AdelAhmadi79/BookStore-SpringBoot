@@ -1,4 +1,4 @@
-package com.example.book_store.customer;
+package com.example.book_store.customer.reserv;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,12 +6,11 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.Set;
 
 @Setter
 @Getter
 @Builder
-public class CustomerSrv {
+public class ProReserveSrv {
     private long id;
 
     private String firstName;
@@ -26,5 +25,8 @@ public class CustomerSrv {
 
     private Date updatedAt;
 
-    private Set<String> bookTitles;
+    private String bookTitle;
+
+    private ReservationType reservationType;
+
 }

@@ -23,6 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
             Book book = bookRepo.findById(bookId).orElseThrow(() -> new RuntimeException("Book with Id \"" + bookId + "\" could not be found."));
             book.setCustomer(customer);
         }
+        //ToDo: I don't remember Why I need this?
         customerRepo.saveAndFlush(customer);
         //here without entity manager updateAt shouldn't get updated(should be null)
         return customerToCustomerSrvForReserve(customer);
@@ -35,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     public CustomerSrv customerToCustomerSrvForReserve(Customer customer) {
         CustomerSrv customerSrv = CustomerSrv.builder()
-                .CustomerID(customer.getId())
+                .id(customer.getId())
                 .createdAt(customer.getCreatedAt())
                 .updatedAt(customer.getUpdatedAt())
                 .build();

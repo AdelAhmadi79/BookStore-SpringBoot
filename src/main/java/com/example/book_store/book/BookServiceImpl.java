@@ -60,7 +60,7 @@ public class BookServiceImpl implements BookService {
             return null;
         }
         return CustomerSrv.builder()
-                .CustomerID(customer.getId())
+                .id(customer.getId())
                 .email(customer.getEmail())
                 .build();
 

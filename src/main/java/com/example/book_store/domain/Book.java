@@ -1,5 +1,6 @@
 package com.example.book_store.domain;
 
+import com.example.book_store.customer.reserv.ReservationType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +27,9 @@ public class Book {
 
     @Column
     private Long isbn;
+
+    @Column
+    private ReservationType reservationType;
 
 
     @Column
