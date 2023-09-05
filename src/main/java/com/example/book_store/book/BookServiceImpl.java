@@ -6,11 +6,14 @@ import com.example.book_store.customer.CustomerSrv;
 import com.example.book_store.domain.Author;
 import com.example.book_store.domain.Book;
 import com.example.book_store.domain.Customer;
+import com.example.book_store.log.LogsManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -27,6 +30,7 @@ public class BookServiceImpl implements BookService {
 
     private final AuthorRepository authorRepo;
 
+    private final Logger logger = LogManager.getLogger(BookServiceImpl.class);
 
     private BookSrv bookToBookSrv(Book book) {
         List<String> penNames = book.getAuthors().stream()
@@ -70,6 +74,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookSrv getSingleBookSrv(Long id) {
+        LogsManager.info("A test for Log");
         Optional<Book> book = bookRepo.findById(id);
 
         if (!book.isPresent())
