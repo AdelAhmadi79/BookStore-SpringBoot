@@ -1,6 +1,7 @@
 package com.example.book_store.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -43,6 +44,7 @@ public class Customer {
     @UpdateTimestamp
     private Date updatedAt;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     private Set<Book> books;
 }

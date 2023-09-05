@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 
@@ -29,7 +30,14 @@ public class Book {
     private Long isbn;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private ReservationType reservationType;
+
+    @Column
+    private LocalDate returnDeadLine;
+
+    @Column
+    private Boolean isDeadlineExpired;
 
 
     @Column

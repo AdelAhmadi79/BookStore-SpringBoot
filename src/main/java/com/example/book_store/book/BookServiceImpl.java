@@ -8,9 +8,11 @@ import com.example.book_store.domain.Book;
 import com.example.book_store.domain.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,7 +58,7 @@ public class BookServiceImpl implements BookService {
     }
 
     private CustomerSrv CustomerToCustomerSrv(Customer customer) {
-        if (customer==null){
+        if (customer == null) {
             return null;
         }
         return CustomerSrv.builder()
@@ -160,5 +162,16 @@ public class BookServiceImpl implements BookService {
         return bookToBookSrv(book);
     }
 
+    @Scheduled(cron = "0 35 12 * * *")
+    public void checkReturnDeadLines() {
+        List<Book> allBooks = bookRepo.findAll();
+        for (Book book : allBooks) {
+            if (LocalDate.now().isAfter(book.getReturnDeadLine())){
+                book.setIsDeadlineExpired(true);
+                bookRepo.saveAndFlush(book);
+                System.out.println("The deadline of book with id:" + book.getId() +" has expired");
+            }
+        }
+    }
 
 }
