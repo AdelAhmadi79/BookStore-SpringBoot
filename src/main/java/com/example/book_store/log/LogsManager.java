@@ -14,5 +14,9 @@ public class LogsManager {
     public static void info(String message) {
         log.info(message);
     }
+    public static void debug(String message){
+        log.debug(message);
+    }
+
 
 }

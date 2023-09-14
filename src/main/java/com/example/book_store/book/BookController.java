@@ -2,10 +2,17 @@ package com.example.book_store.book;
 
 
 import com.example.book_store.domain.Book;
+Addinimport com.example.book_store.security.CustomUserDetailsService;
+import com.example.book_store.security.CustomUserDetailsService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +20,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class BookController {
+    private final CustomUserDetailsService customUserDetailsService; // Injected CustomUserDetailsService
 
+    private static Logger logger = LogManager.getLogger(BookController.class);
     private final BookService bookService;
+
+
 
     @GetMapping("/books")
     public ResponseEntity<List<BookSrv>> getAllBookSrvs() {
@@ -32,8 +43,12 @@ public class BookController {
     }
 
     @PostMapping("/books")
-    public ResponseEntity<BookSrv> createBook(@Valid @RequestBody BookRequest bookReq) {
+    public ResponseEntity<BookSrv> createBook(@Valid @RequestBody BookRequest bookReq) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        String bookReqJson = mapper.writeValueAsString(bookReq);
         //The bookService.saveBook(bookReq) returns an object with type BookSrv
+        logger.warn("Received book create request: {}", bookReqJson);
         return new ResponseEntity<>(bookService.saveBook(bookReq), HttpStatus.CREATED);
     }
 

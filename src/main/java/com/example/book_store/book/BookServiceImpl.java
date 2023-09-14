@@ -6,14 +6,13 @@ import com.example.book_store.customer.CustomerSrv;
 import com.example.book_store.domain.Author;
 import com.example.book_store.domain.Book;
 import com.example.book_store.domain.Customer;
-import com.example.book_store.log.LogsManager;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -74,7 +73,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookSrv getSingleBookSrv(Long id) {
-        LogsManager.info("A test for Log");
+
         Optional<Book> book = bookRepo.findById(id);
 
         if (!book.isPresent())
@@ -133,7 +132,12 @@ public class BookServiceImpl implements BookService {
         Set<Author> authors = new HashSet<>();
 
         for (Long authorId : bookReq.getAuthorIdList()) {
-            Author author = authorRepo.findById(authorId).orElseThrow(() -> new RuntimeException("Author with ID \"" + authorId + "\" could not be found."));
+
+            Author author = authorRepo.findById(authorId).orElseThrow(() -> {
+                RuntimeException exception = new RuntimeException("Author with ID \"" + authorId + "\" could not be found.");
+                logger.error("Error finding author", exception);
+                return exception;
+            });
             authors.add(author);
         }
         book.setAuthors(authors);
@@ -144,8 +148,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookSrv updateBook(Long id, BookRequest bookRequest) {
-        Optional<Book> bookOptional = bookRepo.findById(id);
-        Book book = bookOptional.orElseThrow(() -> new RuntimeException("Book with ID " + id + "could not be found."));
+        Book book = bookRepo.findById(id).orElseThrow(() -> {
+            RuntimeException exception = new RuntimeException("Book with ID " + id + "could not be found.");
+            logger.error("Error finding Book", exception);
+            return exception;
+        });
         bookValidator.validateForUpdate(book, bookRequest);
 
         if (bookRequest.getTitle() != null)
@@ -171,10 +178,10 @@ public class BookServiceImpl implements BookService {
     public void checkReturnDeadLines() {
         List<Book> allBooks = bookRepo.findAll();
         for (Book book : allBooks) {
-            if (LocalDate.now().isAfter(book.getReturnDeadLine())){
+            if (LocalDate.now().isAfter(book.getReturnDeadLine())) {
                 book.setIsDeadlineExpired(true);
                 bookRepo.saveAndFlush(book);
-                System.out.println("The deadline of book with id:" + book.getId() +" has expired");
+                System.out.println("The deadline of book with id:" + book.getId() + " has expired");
             }
         }
     }
