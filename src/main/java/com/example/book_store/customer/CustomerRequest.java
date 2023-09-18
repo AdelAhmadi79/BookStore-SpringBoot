@@ -1,7 +1,7 @@
 package com.example.book_store.customer;
 
 
-import com.example.book_store.domain.Book;
+import com.example.book_store.domain.model.Book;
 
 import java.time.LocalDate;
 import java.util.Set;

@@ -1,7 +1,6 @@
 package com.example.book_store.author;
 
-import com.example.book_store.author.AuthorRepository;
-import com.example.book_store.domain.Author;
+import com.example.book_store.domain.model.Author;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

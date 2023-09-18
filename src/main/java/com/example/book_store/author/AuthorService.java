@@ -1,8 +1,6 @@
 package com.example.book_store.author;
 
-import com.example.book_store.domain.Author;
-
-import java.util.List;
+import com.example.book_store.domain.model.Author;
 
 public interface AuthorService {
 

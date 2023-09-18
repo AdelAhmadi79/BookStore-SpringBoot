@@ -4,7 +4,7 @@ import com.example.book_store.book.ReserveBookRequest;
 import com.example.book_store.customer.reserv.ProReserveRequest;
 import com.example.book_store.customer.reserv.ProReserveSrv;
 import com.example.book_store.customer.reserv.ReservationService;
-import com.example.book_store.domain.Customer;
+import com.example.book_store.domain.model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

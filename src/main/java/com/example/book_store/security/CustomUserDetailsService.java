@@ -1,9 +1,8 @@
 package com.example.book_store.security;
 
-import com.example.book_store.domain.User;
+import com.example.book_store.domain.model.User;
 import com.example.book_store.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

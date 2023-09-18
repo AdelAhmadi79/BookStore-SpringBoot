@@ -1,6 +1,6 @@
 package com.example.book_store.author;
 
-import com.example.book_store.domain.Address;
+import com.example.book_store.domain.model.Address;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

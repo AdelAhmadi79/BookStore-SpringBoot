@@ -3,8 +3,8 @@ package com.example.book_store.author;
 
 import com.example.book_store.address.AddressRepository;
 import com.example.book_store.address.AddressRequest;
-import com.example.book_store.domain.Address;
-import com.example.book_store.domain.Author;
+import com.example.book_store.domain.model.Address;
+import com.example.book_store.domain.model.Author;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

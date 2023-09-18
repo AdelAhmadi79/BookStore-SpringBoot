@@ -1,7 +1,7 @@
 package com.example.book_store.book;
 
 
-import com.example.book_store.domain.Book;
+import com.example.book_store.domain.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,7 @@
 package com.example.book_store.customer;
 
 
-import com.example.book_store.domain.Customer;
+import com.example.book_store.domain.model.Customer;
 
 import java.util.Set;
 

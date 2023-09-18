@@ -1,6 +1,6 @@
 package com.example.book_store.book;
 
-import com.example.book_store.domain.Book;
+import com.example.book_store.domain.model.Book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
