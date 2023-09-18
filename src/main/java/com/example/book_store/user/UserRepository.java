@@ -1,6 +1,6 @@
 package com.example.book_store.user;
 
-import com.example.book_store.domain.User;
+import com.example.book_store.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

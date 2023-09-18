@@ -20,8 +20,7 @@ public class JwtUtil {
 
     private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public static String createRefreshToken(Authentication authentication) {
-        String username = authentication.getName();
+    public static String createRefreshToken(String username) {
         LocalDate now = LocalDate.now();
         LocalDate expiration = LocalDate.now().plusDays(2);
 
@@ -34,8 +33,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static String createAccessToken(Authentication authentication) {
-        String username = authentication.getName();
+    public static String createAccessToken(String username) {
         Date now = new Date();
 
         // Create a Calendar instance and set it to the current date and time
@@ -56,20 +54,16 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static Claims decodeToken(HttpServletRequest request) {
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header == null || !header.startsWith("Bearer ")) {
-            return null; // Token not found or invalid format
-        }
+    public static Claims decodeToken(String token) {
 
         // Extract the token from the header
-        String token = header.substring(7); // Remove "Bearer " prefix
+        String tokenplus = token.substring(7); // Remove "Bearer " prefix
 
         // Decode the token and return claims
         return Jwts.parserBuilder().
                 setSigningKey(SECRET_KEY)
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(tokenplus)
                 .getBody();
     }
 

@@ -1,4 +1,4 @@
-package com.example.book_store.domain;
+package com.example.book_store.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,6 +36,9 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "user_role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(name = "email")
     private String email;

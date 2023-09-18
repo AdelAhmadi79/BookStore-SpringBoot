@@ -2,8 +2,8 @@ package com.example.book_store.customer.reserv;
 
 import com.example.book_store.book.BookRepository;
 import com.example.book_store.customer.CustomerRepository;
-import com.example.book_store.domain.Book;
-import com.example.book_store.domain.Customer;
+import com.example.book_store.domain.model.Book;
+import com.example.book_store.domain.model.Customer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
