@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -25,7 +26,7 @@ import java.util.Collection;
 public class AuthorizationFilter extends OncePerRequestFilter {
 
     private final UserService userService;
-
+    private final CustomUserDetailsService customUserDetailsService;
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -45,9 +46,9 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(claims.getSubject());
         User user = userService.loadUserByUsername(claims.getSubject());
-        if (user == null) {
+        if (userDetails == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
